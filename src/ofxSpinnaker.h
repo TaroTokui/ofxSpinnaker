@@ -7,6 +7,7 @@
 
 static const int DEFAULT_CAM_W = 720;
 static const int DEFAULT_CAM_H = 540;
+static const int DEFAULT_EXPOSURE = 5000;	// micro sec
 
 //class ofxSpinnaker {
 class ofxSpinnaker : public ofThread {
@@ -20,8 +21,8 @@ public:
 	void threadedFunction();
 
 	//basic function----------
-	void setup();
-	void setup(int width, int height, int offset_x = 0, int offset_y = 0);
+	void setup(int index);
+	void setup(int index, int width, int height, int offset_x = 0, int offset_y = 0);
 	void exit();
 
 	void draw(int x, int y);

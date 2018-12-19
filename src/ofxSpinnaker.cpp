@@ -56,13 +56,13 @@ ofxSpinnaker::~ofxSpinnaker()
 }
 
 //--------------------------------------------------------------
-void ofxSpinnaker::setup()
+void ofxSpinnaker::setup(int index)
 {
-	setup(DEFAULT_CAM_W, DEFAULT_CAM_H, 0, 0);
+	setup(index, DEFAULT_CAM_W, DEFAULT_CAM_H, 0, 0);
 }
 
 //--------------------------------------------------------------
-void ofxSpinnaker::setup(int _width, int _height, int _offset_x, int _offset_y)
+void ofxSpinnaker::setup(int index, int _width, int _height, int _offset_x, int _offset_y)
 {
 	width = _width;
 	height = _height;
@@ -98,9 +98,8 @@ void ofxSpinnaker::setup(int _width, int _height, int _offset_x, int _offset_y)
 
 		return;
 	}
-	else {
-		isCameraActive = true;
-		pCam = camList.GetByIndex(0);
+	else if(numCameras > index){
+		pCam = camList.GetByIndex(index);
 	}
 
 	try
@@ -124,21 +123,22 @@ void ofxSpinnaker::setup(int _width, int _height, int _offset_x, int _offset_y)
 
 		// exposure
 		pCam->ExposureAuto.SetValue(ExposureAuto_Off);	// exposure set manually
-		pCam->ExposureTime.SetValue(5000);	// micro sec
+		pCam->ExposureTime.SetValue(DEFAULT_EXPOSURE);	// micro sec
 
 		// gain
 		pCam->GainAuto.SetValue(GainAuto_Off);	// for over 200fps
 
+		isCameraActive = true;
 	}
 	catch (Spinnaker::Exception &e)
 	{
 		cout << "Error: " << e.what() << endl;
+		return;
 	}
 
 	pCam->BeginAcquisition();
 
 	srcImage.allocate(width, height, OF_IMAGE_GRAYSCALE);
-
 	imageBuffer = new unsigned char[width * height];
 }
 
